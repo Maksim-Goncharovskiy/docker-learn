@@ -1,0 +1,41 @@
+version: '3.8'
+
+services:
+  app:
+    container_name: test-app
+    build:
+      context: ./app
+      dockerfile: Dockerfile
+    environment:
+      - DB_PASSWORD=12345
+      - DB_HOST=database
+    ports:
+      - 8000:8000
+    depends_on:
+      - db
+    restart: always
+    networks:
+      - demo
+
+
+  db:
+    container_name: database
+    image: postgres
+    environment:
+      - POSTGRES_USER=maksim
+      - POSTGRES_PASSWORD=12345
+      - POSTGRES_DB=my_db
+    restart: always
+    networks:
+      - demo
+    volumes:
+      - database:/var/lib/postgresql/data postgres
+
+
+volumes:
+  database:
+    name: database
+
+networks:
+  demo:
+    name: demo
